@@ -1,3 +1,16 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "next/no-css-tags",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "react/no-danger"
+  ],
+  "rules": {
+    "no-var": "warn",
+    "no-duplicate-imports": "error",
+    "no-mixed-spaces-and-tabs": "warn",
+    "no-multi-spaces": "warn"
+  },
+  "indent": ["error", 2]
 }
