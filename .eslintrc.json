@@ -1,11 +1,15 @@
 {
   "extends": [
+    "airbnb",
     "next/core-web-vitals",
     "next/no-css-tags",
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
     "react/no-danger"
   ],
+  "env": {
+   "browser": true
+  },
   "rules": {
     "no-var": "warn",
     "no-duplicate-imports": "error",

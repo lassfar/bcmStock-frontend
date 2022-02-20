@@ -1,8 +1,8 @@
 import React, { ReactNode } from 'react';
 
-import AdminSidebar from "@/components/Sidebars/AdminSidebar";
-import DashboardLayout from '@/components/layouts/DashboardLayout';
-import AdminNavbar from '@/components/Navbars/AdminNavbar';
+import AdminSidebar from "@/components/widgets/Sidebars/AdminSidebar";
+import DashboardLayout from '@/components/widgets/layouts/DashboardLayout';
+import AdminNavbar from '@/components/widgets/Navbars/AdminNavbar';
 
 
 const AdminLayout: React.FC<ReactNode> = ({ children }) => {

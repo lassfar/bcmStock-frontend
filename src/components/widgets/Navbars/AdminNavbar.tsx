@@ -1,17 +1,17 @@
 import React from "react";
-import HeadingTitle from "@/components/Typography/HeadingTitle";
-import Button from '@/components/Buttons/Button';
-import DynamicIcon from "@/components/Icons/DynamicIcon";
-import * as hiIcon from "react-icons/hi"
+import HeadingTitle from "@/components/widgets/Typography/HeadingTitle";
+import Button from '@/components/widgets/Buttons/Button';
+import DynamicIcon from "@/components/widgets/Icons/DynamicIcon";
+import { FaBars } from "react-icons/fa";
 
 const AdminNavbar: React.FC = () => {
   return (
     <div className="admin-navbar / h-14 px-8 py-2 flex items-center shadow-md">
       <div className="w-full md:w-2/4 flex items-center">
-        <Button type="button">
-          <DynamicIcon name={hiIcon.HiOutlineMenuAlt2} />
+        <Button type="button" customclass={"border border-solid border-gray-300 rounded-sm p-2"}>
+          <DynamicIcon name={FaBars} />
         </Button>
-        <HeadingTitle typographySize={7} customClass="uppercase font-bold / ml-2">
+        <HeadingTitle textSize={7} customclass="uppercase font-bold / ml-2">
           Tableau de Bord
         </HeadingTitle>
       </div>

@@ -1,0 +1,6 @@
+
+@layer components {
+  .sidebar-link.active {
+    @apply bg-white text-primary
+  }
+}
