@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import HeadingTitle from '@/components/widgets/Typography/HeadingTitle';
 import SidebarLink from '@/components/widgets/Links/SidebarLink';
 import DynamicIcon from '@/components/widgets/Icons/DynamicIcon';
-import { sidebarLinks_data } from './../_data/index';
-import { useState } from 'react';
-import { ISidebarLink } from '@/components/types/widgets/interfaces';
-import { FaArrowDown } from 'react-icons/fa';
 import Button from '@/components/widgets/Buttons/Button';
 import SidebarDropdown from '@/components/widgets/Dropdowns/SidebarDropdown';
+import { ISidebarDropdown } from '@/components/types/widgets/interfaces';
+import { sidebarLinks_data } from '@/components/widgets/_data/index';
+import { FaArrowDown } from 'react-icons/fa';
 
 const AdminSidebar: React.FC = () => {
-  const [sidebarLinks] = useState(sidebarLinks_data as ISidebarLink[])
+  const [sidebarLinks] = useState(sidebarLinks_data as ISidebarDropdown[])
 
-  const constructSidebarItems = (items: ISidebarLink[]) => {
+  const constructSidebarItems = (items: ISidebarDropdown[]) => {
     return (
       items.map((item, idx) => {
         if (!item.isDropdown) {

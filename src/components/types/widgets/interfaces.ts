@@ -1,6 +1,7 @@
 import { EButtonType, IChildren } from "../props";
 import { ICustomClass } from './../props/index.d';
 
+// SIDEBAR INTERFACES
 export interface ISidebarDropdown extends IChildren {
   hrefLink: string,
   text?: string,
@@ -21,4 +22,14 @@ export interface ISidebarDropdownButton extends ICustomClass, IChildren {
   icon?: any,
   isActive?: boolean,
   clickEvent?: (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => any,
+}
+
+//______________________________________________________________________________________
+// DASHBOARD INTERFACES
+export interface IDashboardBox extends ICustomClass, IChildren {
+  text: string,
+  count: number | string,
+  icon: any,
+  bgColor: string,
+  textColor: string
 }

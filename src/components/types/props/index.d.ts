@@ -20,7 +20,7 @@ enum EButtonType {
 export interface IButtonProps extends ICustomClass, IChildren {
   type: EButtonType<HTMLButtonElement>,
   text?: string | number,
-  onClick?: () => void | any
+  clickEvent?: () => void | any
 }
 export interface ILink extends ICustomClass, IChildren {
   text?: string | number,

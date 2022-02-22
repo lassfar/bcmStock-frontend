@@ -9,16 +9,18 @@ const SidebarDropdownButton: React.FC<ISidebarDropdownButton> = ({
   text,
   customclass,
   isActive,
+  clickEvent,
   children,
 }) => {
 
   return (
-    <Button
+    <button
+      onClick={() => clickEvent}
       type={'button'}
-      customclass={`sidebar-dropdownButton ${customclass || ''} ${isActive ? ' active' : ''}`}
+      className={`sidebar-dropdownButton ${customclass || ''} ${isActive ? ' active' : ''}`}
     >
       {text || children}
-    </Button>
+    </button>
   )
 }
 

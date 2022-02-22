@@ -22,20 +22,26 @@ const SidebarDropdown: React.FC<ISidebarDropdown> = ({ links, children }) => {
       }
     })
   }, []);
-  
 
   const toggleDropdown = (e: React.MouseEvent<any>) => {
     e.stopPropagation()
     setOpen(!isOpen)
   }
-  
-  
+
+  const dropdownToggleClassNames = (isDropdownOpen: boolean): string => {
+    return isDropdownOpen ? 'max-h-full scale-y-1 opacity-100' : 'max-h-0 -scale-y-0 opacity-0'
+  }
+
+
   return (
-    <div className={`sidebar-dropdown`} onClick={toggleDropdown}>
-      <SidebarDropdownButton isActive={isActive}>
+    <div className={`sidebar-dropdown / relative`}>
+      {/* <SidebarDropdownButton isActive={isActive} clickEvent={toggleDropdown}>
         {children}
-      </SidebarDropdownButton>
-      <div className={`sidebar-dropdown-links ${isOpen ? 'block' : 'hidden'} ${isActive ? 'active' : ''}`}>
+      </SidebarDropdownButton> */}
+      <button className={`sidebar-dropdownButton ${isActive ? 'active' : ''} ${isOpen ? 'bg-black/20' : ''}`} onClick={toggleDropdown}>
+        {children}
+      </button>
+      <div className={`sidebar-dropdown-links transition-all relative origin-top overflow-hidden ${dropdownToggleClassNames(isOpen)} ${isActive ? 'active' : ''}`}>
         {links?.map((item, idx) => (
           <SidebarSublink hrefLink={item.hrefLink} isActive={item.isActive} key={idx}>
             <DynamicIcon name={item.icon} />

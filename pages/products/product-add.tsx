@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import Head from 'next/head';
 import AdminLayout from "@/components/widgets/layouts/AdminLayout";
 
-const productAdd = () => {
+export default function productAdd() {
   return (
     <>
       <Head>
@@ -10,11 +10,16 @@ const productAdd = () => {
         <meta name="description" content="Product List" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AdminLayout>
-        
-      </AdminLayout>
+
+
     </>
   )
 };
 
-export default productAdd;
+productAdd.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AdminLayout>
+      {page}
+    </AdminLayout>
+  )
+}

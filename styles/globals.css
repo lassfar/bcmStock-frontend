@@ -8,13 +8,15 @@
   .sidebar-link,
   .sidebar-sublink,
   .sidebar-dropdownButton {
-    @apply w-full border-solid border-transparent flex items-center py-2 px-3 mb-2 transition
+    @apply w-full border-solid border-transparent flex items-center py-2 px-3 mb-1 transition
   }
   .sidebar-link,
+  .sidebar-sublink,
   .sidebar-dropdownButton {
     @apply bg-primary text-white font-bold uppercase rounded border-2
   }
   .sidebar-link:not(.active),
+  .sidebar-sublink:not(.active),
   .sidebar-dropdownButton:not(.active) {
     @apply hover:border-blue-400 hover:text-blue-400 
   }
@@ -22,17 +24,14 @@
   .sidebar-dropdownButton.active {
     @apply bg-white text-primary
   }
+  .sidebar-sublink.active {
+    @apply bg-transparent text-blue-400 border-blue-400
+  }
   /* dropdown links */
   .sidebar-dropdown-links {
-    @apply ml-5 border-l-2 border-solid border-white
+    @apply ml-4
   }
   /* .sidebar-dropdown-links.active {
     @apply border-blue-400
   } */
-  .sidebar-sublink {
-    @apply bg-primary text-white font-bold uppercase border-r-4 rounded hover:text-blue-400
-  }
-  .sidebar-sublink.active {
-    @apply text-blue-400 border-blue-400
-  }
 }

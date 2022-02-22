@@ -7,7 +7,10 @@ module.exports = {
     extend: {
       colors: {
         primary: "#1e293b"
-      }
+      },
+      animation: {
+        'dropdown-slide': 'dropdownSlide 500ms linear forwards',
+      },
     },
   },
   plugins: [],
