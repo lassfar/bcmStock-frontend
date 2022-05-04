@@ -2,11 +2,11 @@ import React from "react";
 import HeadingTitle from "@/components/widgets/Typography/HeadingTitle";
 import Button from '@/components/widgets/Buttons/Button';
 import DynamicIcon from "@/components/widgets/Icons/DynamicIcon";
-import { FaBars } from "react-icons/fa";
+import { FaBars, FaSearch } from "react-icons/fa";
 
 const AdminNavbar: React.FC = () => {
   return (
-    <div className="admin-navbar / h-14 px-8 py-2 flex items-center shadow-md">
+    <div className="admin-navbar / h-14 px-8 py-2 flex items-center border-b bg-white">
       <div className="w-full md:w-2/4 flex items-center">
         <Button type="button" customclass={"border border-solid border-gray-300 rounded-sm p-2"}>
           <DynamicIcon name={FaBars} />
@@ -18,7 +18,7 @@ const AdminNavbar: React.FC = () => {
       <div className="w-full md:w-2/4 / flex gap-x-3">
         {/* search */}
         <div className="admin-navbar-search / relative w-52 / bg-white flex items-center focus-within:shadow-sm rounded-md overflow-hidden / px-3 ml-auto">
-          <i className="icon w-6" aria-hidden="true">X</i>
+          <FaSearch className="w-4 h-4" />
           <input type="text" name="" id="" className="w-full h-full text-sm focus:outline-none" />
         </div>
         <div className="">

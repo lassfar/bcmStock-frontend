@@ -4,6 +4,8 @@ import DashboardBox from '@/components/widgets/Cards/DashboardBox'
 import AdminLayout from '@/components/widgets/layouts/AdminLayout'
 import { FaBox, FaProductHunt } from 'react-icons/fa'
 import { dashboardBoxes_data } from '@/components/widgets/_data'
+import { EInputKind } from '@/components/types/props/enum'
+import Input from '@/components/widgets/Inputs/TextBox'
 
 export default function dashboard() {
   const [dashboardBoxes] = useState(dashboardBoxes_data)

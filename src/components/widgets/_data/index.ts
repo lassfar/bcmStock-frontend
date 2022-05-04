@@ -1,5 +1,5 @@
 
-import { FaHome, FaListAlt, FaListUl, FaPlusSquare } from 'react-icons/fa';
+import { FaBuilding, FaHome, FaListAlt, FaListUl, FaPlusSquare } from 'react-icons/fa';
 import { IoMdSettings } from 'react-icons/io';
 import { ISidebarLink, IDashboardBox } from '@/components/types/widgets/interfaces';
 import { BiBox, BiFile, BiPackage, BiTestTube } from "react-icons/bi"
@@ -20,6 +20,27 @@ export const sidebarLinks_data: ISidebarDropdown[] = [
     icon: IoMdSettings,
     isDropdown: false,
     isActive: false,
+  },
+  {
+    hrefLink: '#',
+    text: 'Projects',
+    icon: BiPackage,
+    isDropdown: true,
+    isActive: false,
+    links: [
+      {
+        hrefLink: '/projects/project-add',
+        text: 'Create Project',
+        icon: FaPlusSquare,
+        isActive: false,
+      },
+      {
+        hrefLink: '/projects/project-list',
+        text: 'Product List',
+        icon: FaListUl,
+        isActive: false,
+      },
+    ],
   },
   {
     hrefLink: '#',
@@ -58,6 +79,27 @@ export const sidebarLinks_data: ISidebarDropdown[] = [
       {
         hrefLink: '/orders/order-list',
         text: 'Order List',
+        icon: FaListUl,
+        isActive: false,
+      },
+    ],
+  },
+  {
+    hrefLink: '#',
+    text: 'Clients',
+    icon: FaBuilding,
+    isDropdown: true,
+    isActive: false,
+    links: [
+      {
+        hrefLink: '/customers/customer-add',
+        text: 'New Customer',
+        icon: FaPlusSquare,
+        isActive: false,
+      },
+      {
+        hrefLink: '/customers/customer-list',
+        text: 'Customer List',
         icon: FaListUl,
         isActive: false,
       },

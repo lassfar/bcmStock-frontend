@@ -1,0 +1,62 @@
+// import React, { useEffect, useState, useRef } from 'react'
+// import { ITextBox } from '@/components/types/widgets/interfaces'
+// import DynamicIcon from '@/components/widgets/Icons/DynamicIcon'
+
+// const TextBox: React.FC<ITextBox> = ({
+//   name,
+//   id,
+//   placeholder,
+//   value,
+//   label,
+//   leadingIcon,
+//   tealingIcon,
+//   clickEvent,
+// }) => {
+//   const [isFocused, setFocus] = useState(false)
+//   const textField_ref = useRef(null)
+//   const textFieldGroup_ref = useRef(null)
+
+//   const textField_setFocus = (isFocus: boolean): void => {
+//     setFocus(isFocus)
+//     isFocus ?? textField_ref?.current.focus()
+//   }
+
+//   return (
+//     <div
+//       className={'input-group text-field'}
+//       ref={textFieldGroup_ref}
+//       onClick={() => textField_setFocus(true)}
+//       onBlur={() => textField_setFocus(false)}
+//     >
+//       <label
+//         htmlFor={id}
+//         className={`block / transition-transform origin-left / ${!isFocused ? 'translate-y-8 scale-100' : 'translate-y-4 scale-75'}
+//         ${leadingIcon && 'pr-8'}
+//         ${tealingIcon && 'pl-8'}`}
+//       >
+//         {label}
+//       </label>
+//       <div className="form-input / bg-white border border-gray-300 focus-within:shadow rounded / flex items-stretch py-3 px-3">
+//         {leadingIcon && (
+//           <DynamicIcon name={leadingIcon} customclass="my-auto" />
+//         )}
+//         <input
+//           type="text"
+//           className={`w-full block focus:outline-none leading-none ${leadingIcon && 'pr-2'} ${tealingIcon && 'pl-2'}`}
+//           id={id}
+//           name={name}
+//           placeholder={placeholder}
+//           value={value}
+//           ref={textField_ref}
+//         />
+//         {tealingIcon && (
+//           <button className="">
+//             <DynamicIcon name={tealingIcon} />
+//           </button>
+//         )}
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default TextBox

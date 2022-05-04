@@ -17,16 +17,19 @@
     // absolute imports
     "baseUrl": ".",
     "paths": {
+      "@/app/*": ["src/app/*"],
+      "@/graphql/*": ["src/app/graphql/*"],
       "@/pages/*": ["pages/*"],
       "@/components/*": ["src/components/*"],
-      "@/redux/*": ["src/redux/*"],
       "@/css/*": ["src/assets/css/*"],
       "@/style/*": ["public/style/*"],
       "@/shared/*": ["src/shared/*"],
       "@/constants/*": ["src/constants/*"],
       "@/widgets/*": ["src/widgets/*"],
       "@/layouts/*": ["src/components/layouts/*"],
+      "@/views/*": ["src/components/views/*"],
       "@/images/*": ["public/images/*"],
+      "@/styles/*": ["styles/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

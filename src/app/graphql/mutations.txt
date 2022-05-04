@@ -1,0 +1,11 @@
+mutation {
+  updateCustomer (input: {
+    code_societe: "99"
+  }
+    raison_social: "ALISOP",
+    form_jury: "SA"
+  ) {
+    code_societe,
+    form_jury
+  }
+}

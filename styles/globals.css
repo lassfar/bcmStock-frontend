@@ -2,8 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+body, body *:not('icon') {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
 
 @layer components {
+  .text-theme {
+    @apply dark:text-white text-black
+  }
   /* sidebar link */
   .sidebar-link,
   .sidebar-sublink,
@@ -13,25 +19,186 @@
   .sidebar-link,
   .sidebar-sublink,
   .sidebar-dropdownButton {
-    @apply bg-primary text-white font-bold uppercase rounded border-2
+    @apply bg-dark text-white font-bold uppercase rounded border-2
   }
-  .sidebar-link:not(.active),
-  .sidebar-sublink:not(.active),
-  .sidebar-dropdownButton:not(.active) {
-    @apply hover:border-blue-400 hover:text-blue-400 
+  .sidebar-link:not(.open),
+  .sidebar-sublink:not(.open),
+  .sidebar-dropdownButton:not(.open) {
+    @apply hover:border-primary hover:text-primary 
   }
-  .sidebar-link.active,
-  .sidebar-dropdownButton.active {
-    @apply bg-white text-primary
+  .sidebar-link.open,
+  .sidebar-dropdownButton.open {
+    @apply bg-primary text-white
+  }
+  .sidebar-link.active {
+    @apply bg-white text-dark
   }
   .sidebar-sublink.active {
-    @apply bg-transparent text-blue-400 border-blue-400
+    @apply bg-transparent text-primary border-primary
   }
   /* dropdown links */
   .sidebar-dropdown-links {
     @apply ml-4
   }
   /* .sidebar-dropdown-links.active {
-    @apply border-blue-400
+    @apply border-primary
   } */
+  /* * INPUTS */
+  /* checkbox */
+  .form-textbox,
+  .form-textarea,
+  .form-selectbox {
+    @apply bg-white dark:bg-slate-300 border-2 border-gray-300 rounded flex items-stretch py-1 px-3
+  }
+  .form-textbox:not(.read),
+  .form-textarea:not(.read),
+  .form-selectbox:not(.read) {
+    @apply focus-within:border-primary
+  }
+  .form-textbox > .textbox-input,
+  .form-textarea > .textarea-input,
+  .form-selectbox > .selectbox-input {
+    @apply bg-transparent w-full block focus:outline-none h-6 appearance-none
+  }
+  /* readonly */
+  .form-textbox.read,
+  .form-textarea.read,
+  .form-selectbox.read {
+    @apply bg-light focus-within:border-gray-300
+  }
+  .form-textbox.is-invalid {
+    @apply border-danger
+  }
+  .checkBox-input {
+    @apply appearance-none relative flex items-center justify-center w-5 h-5 border-2 border-light dark:border-primary bg-light focus:border-transparent focus:ring-2 focus:ring-primary/50 rounded transition cursor-pointer
+  }
+  .checkBox-input:checked {
+    @apply bg-primary border-primary/50
+  }
+  .checkBox-input:checked::before {
+    @apply content-[""] absolute top-[15%] left-[15%] border-l-4 border-b-4 border-white h-2 w-3 -rotate-45
+  }
+  /* radio button */
+  .radioButton-input {
+    @apply appearance-none relative flex items-center justify-center w-5 h-5 border-2 border-light bg-light focus:border-transparent focus:ring-2 focus:ring-primary/50 rounded-full transition cursor-pointer
+  }
+  .radioButton-input:checked {
+    @apply bg-primary border-primary
+  }
+  .radioButton-input:checked::before {
+    @apply content-[""] absolute h-3 w-3 bg-white m-auto rounded-full
+  }
+  /* * BUTTON VARIANTS */
+  .btn-primary {
+    @apply bg-primary text-white border-2 border-transparent hover:border-primary/50
+  }
+  .btn-primary-outline {
+    @apply bg-primary/10 hover:bg-primary hover:text-white text-primary border-2 border-primary
+  }
+  .btn-primary-active {
+    @apply bg-primary/20 hover:bg-primary hover:text-white text-primary
+  }
+  .btn-danger {
+    @apply bg-danger text-white border-2 border-transparent hover:border-danger/50
+  }
+  .btn-danger-outline {
+    @apply bg-danger/10 hover:bg-danger hover:text-white text-danger border-2 border-danger
+  }
+  .btn-secondary {
+    @apply bg-secondary text-white border-2 border-transparent hover:border-secondary/50
+  }
+  .btn-secondary-outline {
+    @apply bg-secondary/10 hover:bg-secondary hover:text-white text-secondary border-2 border-secondary
+  }
+  .btn-black {
+    @apply bg-black text-white border-2 border-transparent hover:border-black/50
+  }
+  .btn-black-outline {
+    @apply bg-black/10 hover:bg-black hover:text-white text-black border-2 border-black
+  }
+  .btn-white {
+    @apply bg-white text-black border-2 border-transparent hover:border-white/50
+  }
+  .btn-white-outline {
+    @apply bg-white/10 hover:bg-white hover:text-black text-white border-2 border-white
+  }
+  .btn {
+    @apply transition duration-100 font-semibold rounded flex items-center gap-2 px-3 py-1.5 lg:px-4 lg:py-1.5
+  }
+  .btn-xs {
+    @apply transition duration-100 font-semibold rounded flex items-center gap-2 px-3 py-1.5 lg:px-2 lg:py-1 text-xs
+  }
+  .btn-sm {
+    @apply transition duration-100 font-semibold rounded flex items-center gap-2 px-3 py-1.5 lg:px-2 lg:py-1 text-sm
+  }
+  .btn-lg {
+    @apply transition duration-100 font-semibold rounded flex items-center gap-2 px-3 py-1.5 lg:px-6 lg:py-2.5
+  }
+  /* NOTIFICATIONS */
+  .alerts {
+    @apply w-full sm:w-fit fixed top-4 left-0 sm:left-[unset] sm:right-4 z-50 px-6
+  }
+  .alert {
+    @apply relative w-full md:w-96 h-fit max-h-20 mb-2 overflow-x-hidden overflow-y-hidden
+  }
+  .alert-content {
+    @apply relative w-full h-full p-2 grid grid-cols-6 items-center
+  }
+  .alert--green {
+    @apply bg-green-500/90 border-r-4 rounded-full border-green-500
+  }
+  .alert--primary {
+    @apply bg-primary/90 border-r-4 rounded-full border-primary
+  }
+  .alert--red {
+    @apply bg-red-500/90 border-r-4 rounded-full border-red-500
+  }
+  .alert--yellow {
+    @apply bg-yellow-500/90 border-r-4 rounded-full border-yellow-500
+  }
+  .alert--green * {
+    @apply text-white
+  }
+  .alert--primary * {
+    @apply text-white
+  }
+  .alert--red * {
+    @apply text-white
+  }
+  .alert--yellow * {
+    @apply text-black
+  }
+
+  /* CRUD TABLE */
+  .crudTable {
+    @apply w-full overflow-x-scroll
+  }
+  .crudTable-thead-tr,
+  .crudTable-tbody-tr:not(:last-child) {
+    @apply border-b-[.3px] border-solid border-gray-200 dark:border-gray-600
+  }
+  .crudTable-thead-th {
+    @apply text-gray-400
+  }
+  .crudTable-thead-th:first-child,
+  .crudTable-tbody-td:first-child {
+    @apply pr-3
+  }
+  .crudTable-thead-th:last-child,
+  .crudTable-tbody-td:last-child {
+    @apply pl-3
+  }
+  .crudTable-thead-th:not(:first-child, :last-child),
+  .crudTable-tbody-td:not(:first-child, :last-child) {
+    @apply px-3
+  }
+  .crudTable-thead-th,
+  .crudTable-tbody-td {
+    @apply py-4 text-sm text-left
+  }
+  .crudTable-thead-th,
+  .crudTable-tbody-td {
+    @apply py-4 text-sm text-left
+  }
+
 }

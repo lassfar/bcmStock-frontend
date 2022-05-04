@@ -38,7 +38,7 @@ const SidebarDropdown: React.FC<ISidebarDropdown> = ({ links, children }) => {
       {/* <SidebarDropdownButton isActive={isActive} clickEvent={toggleDropdown}>
         {children}
       </SidebarDropdownButton> */}
-      <button className={`sidebar-dropdownButton ${isActive ? 'active' : ''} ${isOpen ? 'bg-black/20' : ''}`} onClick={toggleDropdown}>
+      <button className={`sidebar-dropdownButton ${isActive ? 'active' : ''} ${isOpen ? 'open' : ''}`} onClick={toggleDropdown}>
         {children}
       </button>
       <div className={`sidebar-dropdown-links transition-all relative origin-top overflow-hidden ${dropdownToggleClassNames(isOpen)} ${isActive ? 'active' : ''}`}>

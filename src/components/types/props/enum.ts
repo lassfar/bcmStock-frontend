@@ -17,4 +17,54 @@ export const buttonType_enumList: Array<any> = [
   "submit",
   "reset",
   undefined
-]
+];
+
+export enum EInputKind {
+  "text",
+  "email",
+  "tel",
+  "date",
+  "number",
+  "password",
+  "checkbox",
+  "radio"
+}
+export enum EButtonVariant {
+  primary = 'btn-primary',
+  secondary = 'btn-secondary',
+  special = 'btn-special',
+  dark = 'btn-dark',
+  white = 'btn-white',
+  black = 'btn-black',
+  primaryOutline = 'btn-primary-outline',
+  secondaryOutline = 'btn-secondary-outline',
+  darkOutline = 'btn-dark-outline',
+  specialOutline = 'btn-special-outline',
+  whiteOutline = 'btn-white-outline',
+  blackOutline = 'btn-black-outline',
+  primaryActive = 'btn-primary-active',
+  secondaryActive = 'btn-secondary-active',
+  specialActive = 'btn-special-active',
+  darkActive = 'btn-dark-active',
+  whiteActive = 'btn-white-active',
+  blackActive = 'btn-black-active',
+}
+export enum EButtonSize {
+  normal = 'btn',
+  xsmall = 'btn-xs',
+  small = 'btn-sm',
+  large = 'btn-lg',
+}
+
+// TABLE ACTION TYPE
+export enum ECrudActionType {
+  click = 'click',
+  link = 'link',
+}
+// alert
+export enum EAlertTheme {
+  success = 'alert--green',
+  info = 'alert--primary',
+  danger = 'alert--red',
+  warning = 'alert--yellow',
+}

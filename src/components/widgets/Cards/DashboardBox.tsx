@@ -2,8 +2,9 @@ import React from 'react'
 import { IDashboardBox } from '@/components/types/widgets/interfaces'
 import HeadingTitle from '@/components/widgets/Typography/HeadingTitle';
 import DynamicIcon from '@/components/widgets/Icons/DynamicIcon';
-import { FaBox } from 'react-icons/fa';
+import { FaArrowRight, FaBox } from 'react-icons/fa';
 import { BiPackage } from 'react-icons/bi';
+import Link from 'next/link';
 
 const DashboardBox: React.FC<IDashboardBox> = ({ text, count, icon, textColor, bgColor, customclass }) => {
   const switchTextColor = (textColor: string): string => {
@@ -11,7 +12,7 @@ const DashboardBox: React.FC<IDashboardBox> = ({ text, count, icon, textColor, b
       case 'yellow':
         return 'text-yellow-400';
       case 'blue':
-        return 'text-blue-400';
+        return 'text-primary';
       case 'red':
         return 'text-red-400';
       case 'green':
@@ -29,7 +30,7 @@ const DashboardBox: React.FC<IDashboardBox> = ({ text, count, icon, textColor, b
       case 'yellow':
         return 'bg-yellow-400';
       case 'blue':
-        return 'bg-blue-400';
+        return 'bg-primary';
       case 'red':
         return 'bg-red-400';
       case 'green':
@@ -44,13 +45,21 @@ const DashboardBox: React.FC<IDashboardBox> = ({ text, count, icon, textColor, b
   }
 
   return (
-    <div className={`dashboard-box / flex flex-col lg:flex-row items-center gap-3 rounded px-3 py-4 ${switchBgColor(bgColor)} ${customclass}`}>
-      <div className="dashboardBox_icon / bg-black w-14 h-14 xl:h-full rounded-md / flex items-center justify-center">
+    <div className={`dashboard-box / relative flex flex-col lg:flex-row items-center gap-3 rounded px-3 py-4 ${switchBgColor(bgColor)} ${customclass}`}>
+      <div className="dashboardBox_icon / bg-black w-14 xl:w-16 h-14 xl:h-full rounded-md / flex items-center justify-center">
         <DynamicIcon size="2rem" name={icon} customclass={`${switchTextColor(bgColor)}`} />
       </div>
       <div className="dashboardBox_texts / w-auto">
-        <HeadingTitle textSize={6} customclass={`font-bold text-center lg:text-left uppercase ${switchTextColor(textColor)} block`} text={text} />
-        <HeadingTitle textSize={3} customclass={`font-bold text-center lg:text-left uppercase ${switchTextColor(textColor)} block`} text={count} />
+        <HeadingTitle textSize={6} customclass={`font-bold text-center lg:text-left uppercase block ${switchTextColor(textColor)}`} text={text} />
+        <HeadingTitle textSize={3} customclass={`font-bold text-center lg:text-left uppercase block ${switchTextColor(textColor)}`} text={count} />
+        {/* <Link href="#">
+          <a className="inline-flex items-center bg-dark/50 text-white text-sm uppercase font-bold rounded w-20 px-2 py-1 ml-auto bottom-0 right-0 lg:absolute">
+            View
+            <span className="bg-white rounded-full p-1 block w-fit ml-auto">
+              <FaArrowRight className=" text-dark text-xs" />
+            </span>
+          </a>
+        </Link> */}
       </div>
     </div>
   )
