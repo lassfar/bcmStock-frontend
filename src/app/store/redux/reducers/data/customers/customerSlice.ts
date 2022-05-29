@@ -5,7 +5,7 @@ import TCustomer from '@/app/ts/types/Customer';
 // const customer: TCustomer = {
 // }
 export const initialState: TCustomer = {
-  code_societe: '',
+  id_societe: '',
   raison_social: '',
   form_jury: '',
   ice: '',
@@ -26,8 +26,11 @@ export const initialState: TCustomer = {
   zipcode_livraison: '',
   ville_livraison: '',
   pays_livraison: '',
-  commercial: '',
-  tel_commercial: '',
+  client_status: '',
+  raison_blocage: '',
+  notes: '',
+  solubilite: '',
+  plafond_accorde: '',
 };
 
 export const customerSlice = createSlice({

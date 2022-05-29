@@ -1,6 +1,8 @@
-import { EButtonType, IChildren } from "../props";
+import { ReactNode } from 'react';
+import { EButtonType, IButtonProps, IChildren, ILink } from "@/components/types/props";
 import { ICustomClass } from '@/components/types/props/index.d';
 import { ECrudActionType, EInputKind, EAlertTheme, EButtonSize } from '@/components/types/props/enum';
+import { IDataStatus } from '@/components/types/props/index.d';
 
 // SIDEBAR INTERFACES
 export interface ISidebarDropdown extends IChildren {
@@ -119,14 +121,16 @@ export interface ICrudLayout extends IChildren {
 }
 
 export interface ICrudAction extends ICustomClass {
+  actionId?: string,
+  actionType: ECrudActionType,
   icon?: any,
   title?: string,
   hrefLink?: string,
   btnSize?: EButtonSize,
   textVisibleClasses?: string,
   clickEvent?: any,
-  actionType: ECrudActionType,
   params?: any,
+  subActions?: ICrudAction[]
 }
 // CRUD TABLE
 export interface ICrudListingTable {
@@ -146,7 +150,6 @@ export interface IFieldGroupLayout extends IChildren, ICustomClass {
   title: string,
 }
 
-
 // -------------------------
 
 export interface IAlert extends ICustomClass, IChildren {
@@ -156,4 +159,21 @@ export interface IAlert extends ICustomClass, IChildren {
   variant?: EAlertTheme,
   isShown?: boolean,
   timer?: number
-} 
+}
+export interface IDataTable {
+  tableHeader: Array<any>,
+  tableData: Array<ITableData>,
+  tableActions: Array<ICrudAction[]> | Array<any[]>,
+  dataStatus: IDataStatus,
+}
+interface ITableData {
+  jsxTemplate: Array<ReactNode>,
+  cellkey: string,
+}
+
+export interface IDataDetailsTable {
+  tableHeader: Array<any>,
+  tableData: any[],
+  tableActions: ICrudAction[] | any[],
+  dataStatus: IDataStatus,
+}

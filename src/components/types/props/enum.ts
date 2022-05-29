@@ -19,15 +19,22 @@ export const buttonType_enumList: Array<any> = [
   undefined
 ];
 
+export enum EButtonType {
+  button = "button",
+  submit = "submit",
+  reset = "reset",
+  undefine = "undefined"
+}
+
 export enum EInputKind {
-  "text",
-  "email",
-  "tel",
-  "date",
-  "number",
-  "password",
-  "checkbox",
-  "radio"
+  text = "text",
+  email = "email",
+  tel = "tel",
+  date = "date",
+  number = "number",
+  password = "password",
+  checkbox = "checkbox",
+  radio = "radio"
 }
 export enum EButtonVariant {
   primary = 'btn-primary',
@@ -36,6 +43,7 @@ export enum EButtonVariant {
   dark = 'btn-dark',
   white = 'btn-white',
   black = 'btn-black',
+  transparent = 'btn-transparent',
   primaryOutline = 'btn-primary-outline',
   secondaryOutline = 'btn-secondary-outline',
   darkOutline = 'btn-dark-outline',
@@ -60,6 +68,7 @@ export enum EButtonSize {
 export enum ECrudActionType {
   click = 'click',
   link = 'link',
+  menu = 'menu'
 }
 // alert
 export enum EAlertTheme {

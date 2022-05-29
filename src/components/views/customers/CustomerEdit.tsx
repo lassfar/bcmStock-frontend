@@ -13,17 +13,25 @@ import TextArea from '@/components/widgets/Inputs/TextArea';
 import { FaPlusSquare, FaTimesCircle, FaListAlt } from 'react-icons/fa';
 import { UPDATE_CUSTOMER } from "@/app/graphql/mutations/customerMutations";
 import { ICrudAction, IAlert } from '@/components/types/widgets/interfaces';
-import { ECrudActionType, EAlertTheme } from '@/components/types/props/enum';
+import { ECrudActionType, EAlertTheme, EButtonSize } from '@/components/types/props/enum';
 import Loading1 from "@/components/widgets/global/indicators/Loading1";
 import { GET_CUSTOMER } from "@/app/graphql/queries/customerQueries";
 import { useRouter } from 'next/router';
 import Alert from "@/components/widgets/global/Alert";
-import { formatValue } from "@/components/views/_helpers/global/functions";
+import { defineAlertyTheme, formatValue } from "@/components/views/_helpers/global/functions";
 import { createAlert } from '@/app/store/redux/actions/widgets';
 import { useAppDispatch } from '@/app/store/redux/hooks';
 import { v4 as uuidv4 } from "uuid";
 import { initialCustomer } from './_data/initialState';
-import DangerIndicator from "@/components/widgets/global/indicators/DangerIndicator";
+import ErrorIndicator from "@/components/widgets/global/indicators/ErrorIndicator";
+import { FiDelete, FiEdit, FiPlus, FiTrash } from "react-icons/fi";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import HeadingTitle from '@/components/widgets/Typography/HeadingTitle';
+import TCommercial from './../../../app/ts/types/Commercial';
+import CrudAction from "@/components/widgets/Forms/list/CrudAction";
+import Button from '@/components/widgets/Buttons/Button';
+import { EButtonVariant } from '@/components/types/props/enum';
+import { initialCommercialState } from './../commercials/initialState';
 
 const countryList: any[] = [];
 country_list.forEach(country => {
@@ -40,13 +48,14 @@ const CustomerEdit: React.FC = () => {
   // * router
   const { query } = useRouter();
   // * customer state
-  const [customerState, setCustomerState] = useState<TCustomer>({...initialCustomer, ...{ code_societe: uuidv4() }});
+  const [customerState, setCustomerState] = useState<TCustomer>({...initialCustomer});
+  const [commercialState, setCommercialState] = useState<TCommercial[]>();
   // * validations
   const {
     register,
     handleSubmit,
     formState,
-    formState: { errors },
+    formState: { errors: vError },
     reset,
   } = useForm({
     resolver: yupResolver(customerValidationSchema),
@@ -61,15 +70,25 @@ const CustomerEdit: React.FC = () => {
   const [getCustomer, { data: customerData, loading: customerLoading, error: customerError }] = useLazyQuery(GET_CUSTOMER);
 
   useEffect(() => {
-    if (query.code_societe) {
+    // console.log("query id_societe", query.id_societe)
+    if (query.id_societe) {
       getCustomer({
         variables: {
-          code_societe: query.code_societe,
+          id_societe: query.id_societe,
         },
       })
       // *** success
-      .then(() => {
-        console.log("then get customer")
+      .then(({ 
+        data: { 
+          getCustomer: {
+            data,
+          }
+        }}) => {
+        // the set data to state 
+        if (data) {
+          setCustomerState(data);
+          setCommercialState(data.Commercials)
+        }
       })
       // !!! ____ error
       .catch((error) => {
@@ -81,46 +100,93 @@ const CustomerEdit: React.FC = () => {
         }));      
       });
     }
-  }, [query.code_societe])
-  
-  useEffect(() => {
-    if (customerData) {
-      setCustomerState(customerData.getCustomer);
-      // console.log("getCustomer", updatingData.getCustomer);
-    }
-  }, [customerData])
+  }, [query.id_societe])
   
 
+  // *** BIND "CUSTOMER" INPUT VALUES
   const setInputValue = (e: React.ChangeEvent<any>) => {
     setCustomerState(customerState => ({...customerState,
       [e.target.id]: e.target.value
     }));
-
     console.log("customerState", customerState);
   }
+  // *** BIND "COMMERCIAL" INPUT VALUES
+  const setCommercialInputValue = (e: React.ChangeEvent<any>, index: number) => {
+    const { id: targetId, value: targetVal } = e.target;
+    // ? UPDATE TARGET COMMERCIAL RECORD
+    const targetCommercial = {
+      ...customerState.Commercials[index],
+      ...{[targetId]: targetVal},
+    }
+    // console.log("targetCommercial", targetCommercial);
+    let newCommercials: any = [];
+    // newCommercials[index] = targetCommercial
+    newCommercials = customerState.Commercials.map((existingCommercial, idx) => (
+      (idx == index) ? targetCommercial : existingCommercial
+    ));
+    // console.log("newCommercials merge", newCommercials);
+    setCommercialState(newCommercials)
+    setCustomerState((customerState) => ({
+      ...customerState,
+      Commercials: [...newCommercials]
+    }));
+    // console.log("newCommercials final", newCommercials)
+    console.log("customerState", customerState)
+  }
+  const removeCommercial = (e: React.ChangeEvent<any>, recordId: number) => {
+    let newCommercials: any = [];
+    newCommercials = customerState.Commercials.filter((item) => recordId != item.id_commercial);
+    console.log("newCommercials", newCommercials);
+    setCustomerState((customerState) => ({
+      ...customerState,
+      Commercials: [...newCommercials]
+    }));
+  }
+  const addNewCommercial = () => {
+    let newCommercial: TCommercial = {
+      ...initialCommercialState,
+      ...{ id_commercial: uuidv4() },
+      ...{ _id_societe: customerState.id_societe as any }};
+    setCustomerState((customerState) => ({
+      ...customerState,
+      Commercials: [
+        ...customerState.Commercials,
+        ...[newCommercial]
+      ],
+    }));
+  }
 
+
+  // *** SUBMIT FORM HANDLER
   const submitEvent = async () => {
+    console.log("submit:", customerState);
+    const alertId = uuidv4();
     await updateCustomer({
-      variables: customerState
+      variables: {
+        id_societe: customerState.id_societe,
+        input: customerState
+      },
     })
      // *** ___ success
     .then(({
       data: {
-        updateCustomer: { raison_social }
+        updateCustomer: {
+          statusCode,
+          title,
+          message,
+        },
       }
     }) => {
-      const alertId = uuidv4();
       dispatch(createAlert({
         id: alertId,
         isShown: true,
-        title: "Succès!",
-        message: `Client "${(raison_social?.substring(0, 30))}" modifié avec succès!`,
-        variant: EAlertTheme.info,
+        title: title,
+        message: message,
+        variant: defineAlertyTheme(statusCode),
       }));
     })
      // !!! ____ error
     .catch((error) => {
-      const alertId = uuidv4();
       dispatch(createAlert({
         id: alertId,
         isShown: true,
@@ -132,7 +198,17 @@ const CustomerEdit: React.FC = () => {
     return false;
   };
   
-  const [isLoading, setLoading] = useState(updatingLoading && customerLoading)
+  const [isLoading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(updatingLoading || customerLoading)
+  }, [updatingLoading, customerLoading])
+
+  useEffect(() => {
+    console.log("vError", vError);
+  }, [vError])
+  
+  
 
   // JSX
   return (
@@ -142,20 +218,20 @@ const CustomerEdit: React.FC = () => {
         name="add-customerState-form"
         onSubmit={handleSubmit(submitEvent)}
       >
-        <div className="relative / w-full / grid sm:grid-cols-2 lg:grid-cols-12 gap-x-3 gap-y-6 lg:gap-x-6 lg:gap-y-6 pt-2 pb-6">
+        <div className="relative / w-full / grid sm:grid-cols-2 lg:grid-cols-12 gap-x-2 gap-y-3 xl:gap-x-6 xl:gap-y-5 pt-2 pb-6">
           <Loading1 isLoading={isLoading} />
-          <DangerIndicator isDanger={customerError} />
+          <ErrorIndicator hasError={customerError} />
           <TextBox
             label="Code Société"
             type={"text"}
-            id="code_societe"
-            name="data[client][code_societe]"
+            id="id_societe"
+            name="data[client][id_societe]"
             placeholder=""
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.code_societe}
-            value={formatValue(customerState.code_societe)}
+            errors={vError.id_societe}
+            value={formatValue(customerState.id_societe)}
             readonly={true}
           />
           <TextBox
@@ -167,7 +243,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-2 lg:col-span-8 xl:col-span-9"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.raison_social}
+            errors={vError.raison_social}
             value={formatValue(customerState.raison_social)}
           />
           <TextBox
@@ -179,7 +255,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.form_jury}
+            errors={vError.form_jury}
             value={formatValue(customerState.form_jury)}
           />
           <TextBox
@@ -191,7 +267,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.ice}
+            errors={vError.ice}
             value={formatValue(customerState.ice)}
           />
           <TextBox
@@ -203,7 +279,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.region}
+            errors={vError.region}
             value={formatValue(customerState.region)}
           />
           <TextBox
@@ -215,7 +291,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.ville}
+            errors={vError.ville}
             value={formatValue(customerState.ville)}
           />
           <TextBox
@@ -227,7 +303,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.chef_chantier}
+            errors={vError.chef_chantier}
             value={formatValue(customerState.chef_chantier)}
           />
           <TextBox
@@ -239,7 +315,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.tel_chef_chantier}
+            errors={vError.tel_chef_chantier}
             value={formatValue(customerState.tel_chef_chantier)}
           />
           <TextBox
@@ -251,7 +327,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.gerant}
+            errors={vError.gerant}
             value={formatValue(customerState.gerant)}
           />
           <TextBox
@@ -263,7 +339,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.tel_gerant}
+            errors={vError.tel_gerant}
             value={formatValue(customerState.tel_gerant)}
           />
           <TextBox
@@ -275,7 +351,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.n_compte}
+            errors={vError.n_compte}
             value={formatValue(customerState.n_compte)}
           />
           <TextBox
@@ -287,7 +363,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.tel_societe}
+            errors={vError.tel_societe}
             value={formatValue(customerState.tel_societe)}
           />
           <TextBox
@@ -299,7 +375,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.fax}
+            errors={vError.fax}
             value={formatValue(customerState.fax)}
           />
           <TextBox
@@ -311,7 +387,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.courriel}
+            errors={vError.courriel}
             value={formatValue(customerState.courriel)}
           />
           <TextArea
@@ -324,7 +400,7 @@ const CustomerEdit: React.FC = () => {
             changeEvent={setInputValue}
             register={register}
             rows={2}
-            errors={errors.adresse_facture}
+            errors={vError.adresse_facture}
             value={formatValue(customerState.adresse_facture)}
           />
           <TextBox
@@ -336,20 +412,20 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.zipcode}
+            errors={vError.zipcode}
             value={formatValue(customerState.zipcode)}
           />
           <TextBox
             label="Ville"
             type={"text"}
-            id="ville"
-            name="data[client][ville]"
+            id="ville_livraison"
+            name="data[client][ville_livraison]"
             placeholder=""
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.ville}
-            value={formatValue(customerState.ville)}
+            errors={vError.ville_livraison}
+            value={formatValue(customerState.ville_livraison)}
           />
           <SelectBox
             label="Pays"
@@ -359,7 +435,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.pays}
+            errors={vError.pays}
             value={formatValue(customerState.pays)}
             optionList={countryList}
           />
@@ -372,7 +448,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-2 lg:col-span-8 xl:col-span-9"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.adresse_livraison}
+            errors={vError.adresse_livraison}
             value={formatValue(customerState.adresse_livraison)}
             rows={1}
           />
@@ -385,7 +461,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.zipcode_livraison}
+            errors={vError.zipcode_livraison}
             value={formatValue(customerState.zipcode_livraison)}
           />
           <TextBox
@@ -397,7 +473,7 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.ville_livraison}
+            errors={vError.ville_livraison}
             value={formatValue(customerState.ville_livraison)}
           />
           <SelectBox
@@ -408,22 +484,125 @@ const CustomerEdit: React.FC = () => {
             customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
             changeEvent={setInputValue}
             register={register}
-            errors={errors.pays_livraison}
+            errors={vError.pays_livraison}
             value={formatValue(customerState.pays_livraison)}
             optionList={countryList}
           />
-          
         </div>
+
+        {/* COMMERCIALS */}
+        {/* <div className="w-full mb-4">
+          <HeadingTitle textSize={6} customclass="font-bold text-dark dark:text-white">
+            Commercials
+          </HeadingTitle>
+        </div> */}
+        {customerState.Commercials.map((item, index) => (
+          <div className="commercial-crud" key={index}>
+            {/* TITLE & "COMMERCIAL" ACTION */}
+            <div className="w-full flex items-center mb-3">
+              <HeadingTitle textSize={6} customclass="font-bold text-theme mb-3 w-70 mb-0">
+                • Commercial {(index+1)}
+              </HeadingTitle>
+              <div className="d-block ml-auto">
+                <Button
+                  type={"button"}
+                  variant={EButtonVariant.primaryOutline}
+                  size={EButtonSize.normal}
+                  clickEvent={(e: any) => removeCommercial(e, item.id_commercial as any)}>
+                  <FiTrash />
+                </Button>
+              </div>
+            </div>
+            {/*** INPUTS ***/}
+            <div className="commercial-fields / col-span-12 grid sm:grid-cols-2 lg:grid-cols-12 gap-x-2 gap-y-3 xl:gap-x-6 xl:gap-y-5 mb-6" key={index}>
+              <TextBox
+                label="Code Commercial"
+                type={"text"}
+                id="id_commercial"
+                name={`data[client][commercial][${index}][id_commercial]`}
+                placeholder=""
+                customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
+                changeEvent={(e: any) => setCommercialInputValue(e, index)}
+                register={register}
+                errors={vError?.Commercials?.length && vError.Commercials[index]?.id_commercial}
+                value={formatValue(customerState.Commercials[index].id_commercial)}
+                readonly={true}
+              />
+              <TextBox
+                label="Nom"
+                type={"text"}
+                id="nom"
+                name={`data[client][commercial][${index}][nom]`}
+                placeholder=""
+                customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
+                changeEvent={(e: any) => setCommercialInputValue(e, index)}
+                register={register}
+                errors={vError?.Commercials?.length && vError.Commercials[index]?.nom}
+                value={formatValue(customerState.Commercials[index].nom)}
+              />
+              <TextBox
+                label="Prénom"
+                type={"text"}
+                id="prenom"
+                name={`data[client][commercial][${index}][prenom]`}
+                placeholder=""
+                customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
+                changeEvent={(e: any) => setCommercialInputValue(e, index)}
+                register={register}
+                errors={vError?.Commercials?.length && vError.Commercials[index]?.prenom}
+                value={formatValue(customerState.Commercials[index].prenom)}
+              />
+              <TextBox
+                label="Tél. Portable"
+                type={"text"}
+                id="tel_portable"
+                name={`data[client][commercial][${index}][tel_portable]`}
+                placeholder=""
+                customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
+                changeEvent={(e: any) => setCommercialInputValue(e, index)}
+                register={register}
+                errors={vError?.Commercials?.length && vError.Commercials[index]?.tel_portable}
+                value={formatValue(customerState.Commercials[index].tel_portable)}
+              />
+              <TextBox
+                label="Tél. Domicile"
+                type={"text"}
+                id="tel_domicile"
+                name={`data[client][commercial][${index}][tel_domicile]`}
+                placeholder=""
+                customclass={"col-span-12 sm:col-span-1 lg:col-span-4 xl:col-span-3"}
+                changeEvent={(e: any) => setCommercialInputValue(e, index)}
+                register={register}
+                errors={vError?.Commercials?.length && vError.Commercials[index]?.tel_domicile}
+                value={formatValue(customerState.Commercials[index].tel_domicile)}
+              />
+            </div>
+          </div>
+        ))}
+        
+        {/* ADD NEW */}
+        {
+          (customerState.Commercials.length < 6) && (
+            <div className="w-full flex items-center mb-6">
+              <div className="d-block ml-auto">
+                <Button type={"button"} variant={EButtonVariant.primaryOutline} size={EButtonSize.small} clickEvent={addNewCommercial}>
+                  <FiPlus />
+                  Nouveau commercial
+                </Button>
+              </div>
+            </div>
+          )
+        }
         
         {/* FORM ACTION BUTTONS */}
-        <div className="form-action-group / w-full flex items-start justify-center gap-5 py-6">
-          <button type={'submit'} className={'btn btn-primary'} disabled={formState.isSubmitting}>
-            <FaPlusSquare />
-            AJOUTER
+        <div className="form-action-group / w-full flex items-start justify-center gap-3 py-3 / rounded-md bg-zinc-200 dark:bg-black/20">
+          <button type={'submit'} className={'btn-sm btn-primary'} disabled={formState.isSubmitting}>
+            <FiEdit />
+            Modifier
           </button>
-          <button type={'button'} className={'btn btn-danger'}>
-            <FaTimesCircle />
-            ANNULER
+          <button type={'button'} className={'btn-sm btn-danger'}>
+            <IoIosCloseCircleOutline />
+            Annuler
           </button>
         </div>
       </form>
@@ -439,7 +618,7 @@ const actionList: ICrudAction[] = [
     actionType: ECrudActionType.link,
     title: 'Liste',
     icon: FaListAlt,
-    customclass: 'mr-2',
+    customclass: 'py-2 px-2.5 ml-1 lg:ml-1.5',
     hrefLink: '/customers/customer-list',
   }
 ];

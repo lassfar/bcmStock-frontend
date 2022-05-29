@@ -1,7 +1,7 @@
 // import { v4 as uuidv4 } from "uuid";
 
 export const initialCustomer = {
-  code_societe: "",
+  id_societe: "",
   raison_social: "",
   form_jury: "",
   ice: "",
@@ -22,6 +22,10 @@ export const initialCustomer = {
   zipcode_livraison: "",
   ville_livraison: "",
   pays_livraison: "",
-  commercial: "",
-  tel_commercial: "",
+  client_status: "",
+  raison_blocage: "",
+  notes: "",
+  solubilite: "",
+  plafond_accorde: "",
+  Commercials: [],
 }

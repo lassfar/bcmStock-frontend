@@ -1,11 +1,11 @@
 mutation {
   updateCustomer (input: {
-    code_societe: "99"
+    id_societe: "99"
   }
     raison_social: "ALISOP",
     form_jury: "SA"
   ) {
-    code_societe,
+    id_societe,
     form_jury
   }
 }

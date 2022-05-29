@@ -38,3 +38,12 @@ export interface IReactIcon extends ICustomClass {
   name: string | JSX,
   size?: string | number,
 }
+
+export interface IDataStatus {
+  count: number,
+  isLoading: boolean,
+  error: {
+    message: string,
+  },
+  empty?: string,
+}

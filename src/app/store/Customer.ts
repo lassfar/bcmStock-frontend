@@ -1,6 +1,4 @@
-import TCommercial from './Commercial';
-
-
+import TCommercial from '@/app/ts/types/Commercial';
 type TCustomer = {
   id_societe: number | string,
   raison_social: string,
