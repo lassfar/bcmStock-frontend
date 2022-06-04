@@ -1,6 +1,6 @@
 
-import { textSizes_enumList, buttonType_enumList } from './enum';
-import { EButtonVariant, EButtonSize } from '@/components/types/props/enum';
+import { textSizes_enumList } from './enum';
+import { EButtonVariant, EButtonSize, EButtonType } from '@/components/types/props/enum';
 
 export interface ICustomClass {
   customclass?: string | JSX
@@ -15,11 +15,8 @@ export interface IHeading extends ICustomClass {
 enum ETextSize {
   textSizes_enumList
 }
-enum EButtonType {
-  buttonType_enumList
-}
 export interface IButtonProps extends ICustomClass, IChildren {
-  type: any,
+  type: EButtonType,
   text?: string | number,
   popTitle?: string,
   variant?: EButtonVariant,

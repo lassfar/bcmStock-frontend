@@ -1,30 +1,31 @@
 import React, { ReactElement } from 'react';
 import Head from 'next/head';
 import AdminLayout from "@/components/widgets/layouts/AdminLayout";
-import ProjectAdd from '@/components/views/projects/ProjectAdd';
+import ProjectList from '@/components/views/projects/ProjectList';
 import PageLayout from '@/components/widgets/layouts/PageLayout';
 
-export default function projectAdd() {
+export default function ProjectListPage() {
   return (
     <>
       <Head>
-        <title>Product List</title>
-        <meta name="description" content="Product List" />
+        <title>Liste des projets</title>
+        <meta name="description" content="Projets | Liste" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <PageLayout>
-        <ProjectAdd />
+        <ProjectList />
       </PageLayout>
 
     </>
   )
 };
 
-projectAdd.getLayout = function getLayout(page: ReactElement) {
+ProjectListPage.getLayout = function getLayout(page: ReactElement) {
   return (
     <AdminLayout>
       {page}
     </AdminLayout>
   )
 }
+

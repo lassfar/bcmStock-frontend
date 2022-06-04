@@ -1,20 +1,20 @@
 import React, { ReactElement } from 'react';
 import Head from 'next/head';
 import AdminLayout from "@/components/widgets/layouts/AdminLayout";
-import ProjectAdd from '@/components/views/projects/ProjectAdd';
+import ProjectEdit from '@/components/views/projects/ProjectEdit';
 import PageLayout from '@/components/widgets/layouts/PageLayout';
 
 export default function projectAdd() {
   return (
     <>
       <Head>
-        <title>Product List</title>
-        <meta name="description" content="Product List" />
+        <title>Modifier Projet</title>
+        <meta name="description" content="Modifier projet" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <PageLayout>
-        <ProjectAdd />
+        <ProjectEdit />
       </PageLayout>
 
     </>

@@ -109,16 +109,7 @@ const CustomerDetail: React.FC = () => {
     }
   }, [query.id_societe])
 
-  
-  const [isLoading, setLoading] = useState(false)
-
-  useEffect(() => {
-    setLoading(customerLoading);
-  }, [customerLoading]);
-
-  const actionList: ICrudAction[] = [
-  ];
-
+  // crud table actions  
   const crudActions = ({id_societe}: any): ICrudAction[] => ([
     {
       actionType: ECrudActionType.click,
@@ -222,7 +213,9 @@ const CustomerDetail: React.FC = () => {
     });
   }
 
-  // JSX
+  // ******************************************************************************
+  // * JSX ________________________________________________________________________
+  // ******************************************************************************
   return (
     <CrudLayout
       headingText="Détails Client"

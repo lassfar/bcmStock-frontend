@@ -10,7 +10,7 @@ import TextBox from "@/components/widgets/Inputs/TextBox";
 import SelectBox from "@/components/widgets/Inputs/SelectBox";
 import { country_list } from "@/views/customers/_data/countries"
 import TextArea from '@/components/widgets/Inputs/TextArea';
-import { FaPlusSquare, FaTimesCircle, FaListAlt } from 'react-icons/fa';
+import { FaPlusSquare, FaTimesCircle, FaListAlt, FaTimes } from 'react-icons/fa';
 import { CREATE_CUSTOMER } from "@/app/graphql/mutations/customerMutations";
 import { ICrudAction, IAlert } from '@/components/types/widgets/interfaces';
 import { ECrudActionType, EAlertTheme, EButtonSize, EButtonVariant } from '@/components/types/props/enum';
@@ -27,6 +27,9 @@ import { FiPlus, FiTrash } from "react-icons/fi";
 import { formatValue } from '@/components/views/_helpers/global/functions';
 import { initialCommercialState } from './../commercials/initialState';
 import TCommercial from '@/app/ts/types/Commercial';
+import CrudActionForm from "@/components/widgets/Forms/layouts/CrudActionForm";
+import CrudAction from "@/components/widgets/Forms/list/CrudAction";
+import { FaPlus } from 'react-icons/fa';
 
 const countryList: any[] = [];
 country_list.forEach(country => {
@@ -69,6 +72,11 @@ const CustomerAdd: React.FC = () => {
     // console.log(`${e.target.id}: value ${e.target.value}`)
   }
 
+  useEffect(() => {
+    console.log("loading", loading);
+  }, [loading])
+  
+
   const submitEvent = async () => {
     await createCustomer({
       variables: {
@@ -89,9 +97,7 @@ const CustomerAdd: React.FC = () => {
       }));
     })
     .catch((error) => {
-      const alertId = uuidv4();
       dispatch(createAlert({
-        id: alertId,
         isShown: true,
         title: "Erreur!",
         message: error.message || `Erreur de création!`,
@@ -150,6 +156,25 @@ const CustomerAdd: React.FC = () => {
     console.log("vError", vError);
   }, [vError])
 
+  const [crudActionList] = useState([
+    {
+      actionType: ECrudActionType.submit,
+      title: 'Ajouter',
+      icon: FaPlus,
+      textVisibleClasses: 'block',
+      btnVariant: EButtonVariant.primaryActive,
+      btnSize: EButtonSize.normal,
+    },
+    {
+      actionType: ECrudActionType.link,
+      title: 'Annuler',
+      icon: FaTimes,
+      textVisibleClasses: 'block',
+      hrefLink: '/customers/customer-list',
+      btnVariant: EButtonVariant.dangerOutline,
+      btnSize: EButtonSize.normal,
+    },
+  ]);
   
 
   // JSX
@@ -160,8 +185,8 @@ const CustomerAdd: React.FC = () => {
         name="add-customerState-form"
         onSubmit={handleSubmit(submitEvent)}
       >
-        <div className="relative w-full / grid sm:grid-cols-2 lg:grid-cols-12 gap-x-3 gap-y-6 lg:gap-x-6 lg:gap-y-6 pt-2 pb-6">
-          <Loading1 loading={loading} />
+        <div className="relative / w-full / grid sm:grid-cols-2 lg:grid-cols-12 gap-x-2 gap-y-3 xl:gap-x-6 xl:gap-y-5 pt-2 pb-6">
+          <Loading1 isLoading={loading} />
           <TextBox
             label="Code Société"
             type={"text"}
@@ -532,16 +557,11 @@ const CustomerAdd: React.FC = () => {
         }
         
         {/* FORM ACTION BUTTONS */}
-        <div className="form-action-group / w-full flex items-start justify-center gap-5 py-6">
-          <button type={'submit'} className={'btn btn-primary'} disabled={formState.isSubmitting}>
-            <FaPlusSquare />
-            AJOUTER
-          </button>
-          <button type={'button'} className={'btn btn-danger'}>
-            <FaTimesCircle />
-            ANNULER
-          </button>
-        </div>
+        <CrudActionForm>
+          {crudActionList?.map((action, key) => (
+            <CrudAction {...action} key={key} />
+          ))}
+        </CrudActionForm>
       </form>
     </CrudLayout>
   );

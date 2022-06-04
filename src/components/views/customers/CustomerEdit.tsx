@@ -10,10 +10,10 @@ import TextBox from "@/components/widgets/Inputs/TextBox";
 import SelectBox from "@/components/widgets/Inputs/SelectBox";
 import { country_list } from "@/views/customers/_data/countries"
 import TextArea from '@/components/widgets/Inputs/TextArea';
-import { FaPlusSquare, FaTimesCircle, FaListAlt } from 'react-icons/fa';
+import { FaPlusSquare, FaTimesCircle, FaListAlt, FaTimes } from 'react-icons/fa';
 import { UPDATE_CUSTOMER } from "@/app/graphql/mutations/customerMutations";
 import { ICrudAction, IAlert } from '@/components/types/widgets/interfaces';
-import { ECrudActionType, EAlertTheme, EButtonSize } from '@/components/types/props/enum';
+import { ECrudActionType, EAlertTheme, EButtonSize, EButtonVariant } from '@/components/types/props/enum';
 import Loading1 from "@/components/widgets/global/indicators/Loading1";
 import { GET_CUSTOMER } from "@/app/graphql/queries/customerQueries";
 import { useRouter } from 'next/router';
@@ -30,8 +30,10 @@ import HeadingTitle from '@/components/widgets/Typography/HeadingTitle';
 import TCommercial from './../../../app/ts/types/Commercial';
 import CrudAction from "@/components/widgets/Forms/list/CrudAction";
 import Button from '@/components/widgets/Buttons/Button';
-import { EButtonVariant } from '@/components/types/props/enum';
 import { initialCommercialState } from './../commercials/initialState';
+import { MdClose } from "react-icons/md";
+import { EButtonType } from '@/components/types/props/enum';
+import CrudActionForm from './../../widgets/Forms/layouts/CrudActionForm';
 
 const countryList: any[] = [];
 country_list.forEach(country => {
@@ -47,6 +49,7 @@ const CustomerEdit: React.FC = () => {
   const dispatch = useAppDispatch();
   // * router
   const { query } = useRouter();
+  const router = useRouter();
   // * customer state
   const [customerState, setCustomerState] = useState<TCustomer>({...initialCustomer});
   const [commercialState, setCommercialState] = useState<TCommercial[]>();
@@ -156,11 +159,29 @@ const CustomerEdit: React.FC = () => {
     }));
   }
 
+  const [crudActionList] = useState([
+    {
+      actionType: ECrudActionType.submit,
+      title: 'Modifier',
+      icon: FiEdit,
+      textVisibleClasses: 'block',
+      btnVariant: EButtonVariant.primaryActive,
+      btnSize: EButtonSize.normal,
+    },
+    {
+      actionType: ECrudActionType.link,
+      title: 'Annuler',
+      icon: FaTimes,
+      textVisibleClasses: 'block',
+      hrefLink: '/customers/customer-list',
+      btnVariant: EButtonVariant.dangerOutline,
+      btnSize: EButtonSize.normal,
+    },
+  ]);
 
   // *** SUBMIT FORM HANDLER
   const submitEvent = async () => {
     console.log("submit:", customerState);
-    const alertId = uuidv4();
     await updateCustomer({
       variables: {
         id_societe: customerState.id_societe,
@@ -178,17 +199,17 @@ const CustomerEdit: React.FC = () => {
       }
     }) => {
       dispatch(createAlert({
-        id: alertId,
         isShown: true,
         title: title,
         message: message,
         variant: defineAlertyTheme(statusCode),
+        delay: 5000
       }));
+      router.push('/customers/customer-list')
     })
      // !!! ____ error
     .catch((error) => {
       dispatch(createAlert({
-        id: alertId,
         isShown: true,
         title: "Erreur!",
         message: error.message || `Erreur de modification!`,
@@ -582,7 +603,7 @@ const CustomerEdit: React.FC = () => {
         
         {/* ADD NEW */}
         {
-          (customerState.Commercials.length < 6) && (
+          (customerState?.Commercials.length < 6) && (
             <div className="w-full flex items-center mb-6">
               <div className="d-block ml-auto">
                 <Button type={"button"} variant={EButtonVariant.primaryOutline} size={EButtonSize.small} clickEvent={addNewCommercial}>
@@ -595,23 +616,20 @@ const CustomerEdit: React.FC = () => {
         }
         
         {/* FORM ACTION BUTTONS */}
-        <div className="form-action-group / w-full flex items-start justify-center gap-3 py-3 / rounded-md bg-zinc-200 dark:bg-black/20">
-          <button type={'submit'} className={'btn-sm btn-primary'} disabled={formState.isSubmitting}>
-            <FiEdit />
-            Modifier
-          </button>
-          <button type={'button'} className={'btn-sm btn-danger'}>
-            <IoIosCloseCircleOutline />
-            Annuler
-          </button>
-        </div>
+        {/* <CrudActionForm {...crudActionList} /> */}
+
+        {/* FORM ACTION BUTTONS */}
+        <CrudActionForm>
+          {crudActionList?.map((action, key) => (
+            <CrudAction {...action} key={key} />
+          ))}
+        </CrudActionForm>
       </form>
     </CrudLayout>
   );
 };
 
 export default CustomerEdit;
-
 
 const actionList: ICrudAction[] = [
   {

@@ -9,13 +9,12 @@ export const READ_PROJECTS = gql`
       title
       message
       data {
-        code_project
+        id_project
         designation
-        customer {
+        _id_societe
+        Customer {
           id_societe
           raison_social
-          form_jury
-          ice
         }
       }
     }
@@ -23,18 +22,18 @@ export const READ_PROJECTS = gql`
 `;
 
 export const GET_PROJECT = gql`
-  query GetProject($code_project: String!) {
-    getProject(code_project: $code_project) {
+  query GetProject($id_project: String!) {
+    getProject(id_project: $id_project) {
       statusCode
       title
       message
       data {
-        code_project
+        id_project
         designation
-        customer {
+        _id_societe
+        Customer {
           id_societe
-          raison_social,
-          form_jury
+          raison_social
         }
       }
     }

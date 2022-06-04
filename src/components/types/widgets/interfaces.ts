@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
-import { EButtonType, IButtonProps, IChildren, ILink } from "@/components/types/props";
+import { IButtonProps, IChildren, ILink } from "@/components/types/props";
 import { ICustomClass } from '@/components/types/props/index.d';
-import { ECrudActionType, EInputKind, EAlertTheme, EButtonSize } from '@/components/types/props/enum';
+import { ECrudActionType, EInputKind, EAlertTheme, EButtonSize, EButtonVariant } from '@/components/types/props/enum';
 import { IDataStatus } from '@/components/types/props/index.d';
 
 // SIDEBAR INTERFACES
@@ -19,6 +19,13 @@ export interface ISidebarLink extends ICustomClass, IChildren {
   text?: string,
   icon?: any,
   isActive?: boolean,
+}
+export interface ISidebarSublink extends ICustomClass, IChildren {
+  text?: string,
+  customclass?: string,
+  hrefLink: string,
+  isActive?: string,
+  children?: ReactNode,
 }
 export interface ISidebarDropdownButton extends ICustomClass, IChildren {
   text?: string,
@@ -71,7 +78,7 @@ export interface ITextArea extends ICustomClass, IFieldValidation {
   changeEvent?: any,
   attrs?: any,
 }
-export interface ISelectBox extends ICustomClass, IFieldValidation {
+export interface ISelectBox extends ICustomClass, IFieldValidation, IChildren {
   type?: string,
   name?: string,
   id: string,
@@ -85,6 +92,8 @@ export interface ISelectBox extends ICustomClass, IFieldValidation {
 export interface ISelectBoxOption {
   text: string | number | boolean,
   value: string | number,
+  selected?: boolean,
+  disabled?: boolean,
 }
 export interface ICheckBox extends ICustomClass, IFieldValidation {
   type?: string,
@@ -127,6 +136,7 @@ export interface ICrudAction extends ICustomClass {
   title?: string,
   hrefLink?: string,
   btnSize?: EButtonSize,
+  btnVariant?: EButtonVariant,
   textVisibleClasses?: string,
   clickEvent?: any,
   params?: any,
@@ -141,8 +151,9 @@ export interface ICrudListingTable {
 export interface ICrudTableHeader {
   cellname: string;
   cellkey: string;
-  minWidth: string;
-  maxWidth: string;
+  customclass?: string,
+  minWidth?: string;
+  maxWidth?: string;
 }
 
 // -------------------------
@@ -158,7 +169,7 @@ export interface IAlert extends ICustomClass, IChildren {
   message?: string,
   variant?: EAlertTheme,
   isShown?: boolean,
-  timer?: number
+  delay?: number
 }
 export interface IDataTable {
   tableHeader: Array<any>,

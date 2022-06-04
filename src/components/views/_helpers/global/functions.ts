@@ -24,3 +24,13 @@ export const defineAlertyTheme = (level: number | string) => {
       return EAlertTheme.info
   }
 }
+
+export const copyToClipboard = (selector: string) => {
+  let targetElement = document.querySelector(selector) as any;
+  if (targetElement) {
+    targetElement.select();
+    document.execCommand("copy");
+    return targetElement.value
+  }
+  return null
+}

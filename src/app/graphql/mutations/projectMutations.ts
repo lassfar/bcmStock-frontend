@@ -1,40 +1,29 @@
 import { gql } from "@apollo/client";
 
 export const CREATE_PROJECT = gql`
-  mutation CreateProject($input: ProjectAddInput) {
+  mutation CreateProject($input: ProjectInput) {
     createProject(input: $input) {
       statusCode
       title
       message
       data {
-        code_project
+        id_project
         designation
-        customer {
-          id_societe
-          raison_social
-          form_jury
-          ice
-        }
+        _id_societe
       }
     }
-  }
-}`;
+  }`;
 
 export const UPDATE_PROJECT = gql`
-  mutation UpdateProject($code_project: String!, $input: ProjectUpdateInput) {
-    updateProject(code_project: $code_project, input: $input) {
+  mutation UpdateProject($id_project: String!, $input: ProjectInput) {
+    updateProject(id_project: $id_project, input: $input) {
       statusCode
       title
       message
       data {
-        code_project
+        id_project
         designation
-        customer {
-          id_societe
-          raison_social
-          form_jury
-          ice
-        }
+        _id_societe
       }
     }
   }
@@ -49,13 +38,9 @@ export const DELETE_PROJECT = gql`
       title
       message
       data {
-        code_project
+        id_project
         designation
-        customer {
-          id_societe
-          raison_social,
-          form_jury
-        }
+        _id_societe
       }
     }
   }

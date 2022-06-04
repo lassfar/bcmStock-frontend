@@ -3,7 +3,7 @@ import Loading1 from '@/components/widgets/global/indicators/Loading1';
 import HeadingTitle from '@/components/widgets/Typography/HeadingTitle';
 import Button from '@/components/widgets/Buttons/Button';
 import { FiRefreshCcw } from 'react-icons/fi';
-import { EButtonVariant } from '@/components/types/props/enum';
+import { EButtonVariant, EButtonType } from '@/components/types/props/enum';
 import ErrorIndicator from "@/components/widgets/global/indicators/ErrorIndicator";
 import { useEffect, useState } from 'react';
 import { IDataTable } from '@/components/types/widgets/interfaces';
@@ -47,17 +47,17 @@ const DataTable: React.FC<IDataTable> = ({ tableHeader, tableData, tableActions,
           {!dataStatus.isLoading && !dataStatus.error.message && tableData?.length
             && Array((dataStatus.count)).fill().map((_, rowIndex) => (
             <tr className="crudTable-tbody-tr" key={rowIndex}>
-              {tableHeader.map((thead) => (
-                tableData?.map((data) => (
+              {tableHeader.map((thead, theadIndex) => (
+                tableData?.map((data, dataIndex) => (
                   thead.cellkey == data.cellkey && ( 
-                    <td className="crudTable-tbody-td" key={rowIndex}>
+                    <td className="crudTable-tbody-td" key={theadIndex}>
                       {data.jsxTemplate[rowIndex]}
                     </td>
                   )
                 ))
               ))}
               {/* table actions */}
-              <td>
+              <td key={rowIndex}>
                 <div className="flex justify-end">
                   {tableActions[rowIndex]}
                 </div>
@@ -69,7 +69,7 @@ const DataTable: React.FC<IDataTable> = ({ tableHeader, tableData, tableActions,
                 <div className="flex items-center justify-center gap-3">
                   <HeadingTitle text={dataStatus.empty} textSize={7} customclass="text-theme text-center my-9" />
                   <Button
-                    type={"button"}
+                    type={EButtonType.button}
                     variant={EButtonVariant.primaryOutline}
                     popTitle={"Actualiser"}
                     customclass="px-2"
@@ -86,7 +86,7 @@ const DataTable: React.FC<IDataTable> = ({ tableHeader, tableData, tableActions,
                 <div className="flex items-center justify-center gap-3">
                   <HeadingTitle text={dataStatus.error.message} textSize={7} customclass="text-theme text-center my-9" />
                   <Button
-                    type={"button"}
+                    type={EButtonType.button}
                     variant={EButtonVariant.primaryOutline}
                     popTitle={"Actualiser"}
                     customclass="px-2"

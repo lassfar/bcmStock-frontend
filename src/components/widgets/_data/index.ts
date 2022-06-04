@@ -6,7 +6,7 @@ import { BiBox, BiFile, BiPackage, BiTestTube } from "react-icons/bi"
 import { MdOutlineList } from "react-icons/md"
 import { ISidebarDropdown } from './../../types/widgets/interfaces';
 
-export const sidebarLinks_data: ISidebarDropdown[] = [
+export const sidebarLinksConfig: ISidebarDropdown[] = [
   {
     hrefLink: '/admin/dashboard',
     text: 'Dashboard',
@@ -15,11 +15,32 @@ export const sidebarLinks_data: ISidebarDropdown[] = [
     isActive: false,
   },
   {
-    hrefLink: '/admin/settings',
+    hrefLink: '/admin/Paramétres',
     text: 'Settings',
     icon: IoMdSettings,
     isDropdown: false,
     isActive: false,
+  },
+  {
+    hrefLink: '#',
+    text: 'Clients',
+    icon: FaBuilding,
+    isDropdown: true,
+    isActive: false,
+    links: [
+      {
+        hrefLink: '/customers/customer-add',
+        text: 'New Customer',
+        icon: FaPlusSquare,
+        isActive: false,
+      },
+      {
+        hrefLink: '/customers/customer-list',
+        text: 'Customer List',
+        icon: FaListUl,
+        isActive: false,
+      },
+    ],
   },
   {
     hrefLink: '#',
@@ -79,27 +100,6 @@ export const sidebarLinks_data: ISidebarDropdown[] = [
       {
         hrefLink: '/orders/order-list',
         text: 'Order List',
-        icon: FaListUl,
-        isActive: false,
-      },
-    ],
-  },
-  {
-    hrefLink: '#',
-    text: 'Clients',
-    icon: FaBuilding,
-    isDropdown: true,
-    isActive: false,
-    links: [
-      {
-        hrefLink: '/customers/customer-add',
-        text: 'New Customer',
-        icon: FaPlusSquare,
-        isActive: false,
-      },
-      {
-        hrefLink: '/customers/customer-list',
-        text: 'Customer List',
         icon: FaListUl,
         isActive: false,
       },

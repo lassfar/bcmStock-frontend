@@ -112,6 +112,10 @@ body, body *:not('icon') {
     @apply content-[""] absolute h-3 w-3 bg-white m-auto rounded-full
   }
   /* * BUTTON VARIANTS */
+  [class^="btn"] *,
+  [class^="btn"] > * {
+    @apply pointer-events-none
+  }
   .btn-primary {
     @apply bg-primary text-white border-2 border-transparent hover:border-primary/50
   }

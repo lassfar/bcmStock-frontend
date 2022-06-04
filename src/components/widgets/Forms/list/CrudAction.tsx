@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { ICrudAction } from "@/components/types/widgets/interfaces";
 import Button from "@/components/widgets/Buttons/Button";
 import DynamicIcon from "@/components/widgets/Icons/DynamicIcon";
-import { ECrudActionType, EButtonSize, EButtonVariant } from "@/components/types/props/enum";
+import { ECrudActionType, EButtonSize, EButtonVariant, EButtonType } from "@/components/types/props/enum";
 import { useRouter } from "next/router";
 import { v4 as uuidv4 } from "uuid";
 
@@ -17,12 +17,17 @@ const CrudAction: React.FC<ICrudAction> = ({
   clickEvent,
   customclass,
   subActions,
+  btnVariant,
 }) => {
   const router = useRouter();
 
   // useEffect(() => {
   //   console.log("subActions", subActions);
   // }, [subActions])
+  
+  // useEffect(() => {
+  //   console.log("title", title);
+  // }, [title])
   
 
   const generateClickEvent = (
@@ -109,7 +114,7 @@ const CrudAction: React.FC<ICrudAction> = ({
   return (
     <div className="crudAction / relative z-30" id={actionId}>
       <Button
-        type={"button"}
+        type={(actionType == 'submit') ? EButtonType.submit : EButtonType.button}
         clickEvent={(e: any) => generateClickEvent(e, actionType, clickEvent, hrefLink)}
         customclass={customclass}
         variant={EButtonVariant.primaryActive}
@@ -125,15 +130,15 @@ const CrudAction: React.FC<ICrudAction> = ({
         >
           {subActions.map((action, key) => (
             <Button
-              type={"button"}
+              type={EButtonType.button}
               clickEvent={(e: any) => generateClickEvent(e, action.actionType, action.clickEvent, action.hrefLink)}
               customclass={`crudAction_dropdownItem / w-full rounded px-2.5 py-1 ${customclass}`}
-              variant={EButtonVariant.transparent}
+              variant={btnVariant || EButtonVariant.transparent}
               size={btnSize || EButtonSize.xsmall}
               popTitle={title}
               key={key}
             >
-              <span className={"text-secondary"}>{action.title}</span>
+              <span className={"text-primary"}>{action.title}</span>
             </Button>
           ))}
         </div>

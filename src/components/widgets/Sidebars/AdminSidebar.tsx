@@ -5,12 +5,12 @@ import DynamicIcon from '@/components/widgets/Icons/DynamicIcon'
 import Button from '@/components/widgets/Buttons/Button'
 import SidebarDropdown from '@/components/widgets/Dropdowns/SidebarDropdown'
 import { ISidebarDropdown } from '@/components/types/widgets/interfaces'
-import { sidebarLinks_data } from '@/components/widgets/_data/index'
-import { FaArrowDown } from 'react-icons/fa'
+import { sidebarLinksConfig } from '@/components/widgets/_data/index'
 import { FaBars } from 'react-icons/fa'
+import { EButtonType, ETextSize } from '@/components/types/props/enum'
 
 const AdminSidebar: React.FC = () => {
-  const [sidebarLinks] = useState(sidebarLinks_data as ISidebarDropdown[])
+  const [sidebarLinks] = useState(sidebarLinksConfig as ISidebarDropdown[])
   const [isSidebarCollapsed, setCollapseSidebar] = useState(false)
 
   const constructSidebarItems = (items: ISidebarDropdown[]) => {
@@ -23,7 +23,7 @@ const AdminSidebar: React.FC = () => {
             key={idx}
           >
             <DynamicIcon name={item.icon} />
-            <HeadingTitle textSize={9} customclass="ml-2">
+            <HeadingTitle textSize={ETextSize.sm} customclass="ml-2">
               {item.text}
             </HeadingTitle>
           </SidebarLink>
@@ -32,7 +32,7 @@ const AdminSidebar: React.FC = () => {
         return (
           <SidebarDropdown hrefLink="#" links={item.links} key={idx}>
             <DynamicIcon name={item.icon} />
-            <HeadingTitle textSize={9} customclass="ml-2">
+            <HeadingTitle textSize={ETextSize.sm} customclass="ml-2">
               {item.text}
             </HeadingTitle>
             {/* <Button type="button">
@@ -57,7 +57,7 @@ const AdminSidebar: React.FC = () => {
           BECOMAR
         </HeadingTitle>
         <Button
-          type="button"
+          type={EButtonType.button}
           customclass={'border border-solid border-gray-300 rounded-sm p-2 ml-auto'}
         >
           <DynamicIcon name={FaBars} />

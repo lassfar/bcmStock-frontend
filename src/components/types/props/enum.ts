@@ -1,29 +1,22 @@
-export const textSizes_enumList: Array<string> = [
-  'text-base',
-  'text-4xl md:text-5xl lg:text-6xl',
-  'text-3xl md:text-4xl lg:text-5xl',
-  'text-2xl md:text-3xl lg:text-4xl',
-  'text-xl md:text-2xl lg:text-3xl',
-  'text-lg md:text-xl lg:text-2xl',
-  'text-md md:text-lg lg:text-xl',
-  'text-base md:text-md lg:text-lg',
-  'text-sm md:text-base lg:text-md',
-  'text-sm',
-  'text-xs',
-];
-
-export const buttonType_enumList: Array<any> = [
-  "button",
-  "submit",
-  "reset",
-  undefined
-];
+export enum ETextSize {
+  x8 = 'text-4xl md:text-5xl lg:text-6xl',
+  x7 = 'text-3xl md:text-4xl lg:text-5xl',
+  x6 = 'text-2xl md:text-3xl lg:text-4xl',
+  x5 = 'text-xl md:text-2xl lg:text-3xl',
+  x4 = 'text-lg md:text-xl lg:text-2xl',
+  x3 = 'text-md md:text-lg lg:text-xl',
+  x2 = 'text-base md:text-md lg:text-lg',
+  x1 = 'text-sm md:text-base lg:text-md',
+  base = 'text-base',
+  sm = 'text-sm',
+  xs = 'text-xs',
+};
 
 export enum EButtonType {
   button = "button",
   submit = "submit",
   reset = "reset",
-  undefine = "undefined"
+  undefined = "undefined"
 }
 
 export enum EInputKind {
@@ -39,12 +32,14 @@ export enum EInputKind {
 export enum EButtonVariant {
   primary = 'btn-primary',
   secondary = 'btn-secondary',
+  danger = 'btn-danger',
   special = 'btn-special',
   dark = 'btn-dark',
   white = 'btn-white',
   black = 'btn-black',
   transparent = 'btn-transparent',
   primaryOutline = 'btn-primary-outline',
+  dangerOutline = 'btn-danger-outline',
   secondaryOutline = 'btn-secondary-outline',
   darkOutline = 'btn-dark-outline',
   specialOutline = 'btn-special-outline',
@@ -68,7 +63,8 @@ export enum EButtonSize {
 export enum ECrudActionType {
   click = 'click',
   link = 'link',
-  menu = 'menu'
+  menu = 'menu',
+  submit = 'submit',
 }
 // alert
 export enum EAlertTheme {

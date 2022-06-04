@@ -10,7 +10,8 @@ const SelectBox: React.FC<ISelectBox> = ({
   label,
   customclass,
   changeEvent,
-  optionList
+  errors,
+  optionList,
 }) => {
   const selectBox_ref = useRef(null)
   const selectBoxGroup_ref = useRef(null)
@@ -37,7 +38,7 @@ const SelectBox: React.FC<ISelectBox> = ({
         >
           {optionList?.map((option, key) => {
             return (
-              <option value={option.value} key={key}>
+              <option value={option.value} defaultValue={option.value} disabled={option.disabled} key={key}>
                 {option.text}
               </option>
             )
@@ -45,6 +46,7 @@ const SelectBox: React.FC<ISelectBox> = ({
         </select>
         <FaChevronDown className="text-dark my-auto text-sm select-none" />
       </div>
+      <small className={`${(errors && errors.message) ? 'text-danger': 'text-green-500'}`}>{errors?.message}</small>
     </div>
   )
 }

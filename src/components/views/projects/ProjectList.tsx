@@ -1,50 +1,51 @@
-import React, { useState, useEffect, ReactNode } from "react";
+import React, { useState, useEffect } from "react";
 import { EButtonVariant, EButtonSize, ECrudActionType, EAlertTheme } from "@/components/types/props/enum";
 import { FaSearch, FaPlus } from "react-icons/fa";
-import { FiEye, FiTrash, FiEdit3, FiRefreshCcw } from "react-icons/fi";
+import { FiEye, FiTrash, FiEdit3, FiRefreshCcw, FiCopy } from "react-icons/fi";
 import { ICrudAction, IAlert } from "@/components/types/widgets/interfaces";
 import CrudLayout from "@/components/widgets/Forms/layouts/CrudLayout";
 import CrudAction from "@/components/widgets/Forms/list/CrudAction";
-import TCustomer from "@/app/ts/types/Customer";
+import TProject from "@/app/ts/types/Project";
 import { useLazyQuery, useMutation } from '@apollo/client';
-import { READ_CUSTOMERS } from '@/app/graphql/queries/customerQueries';
-import { DELETE_CUSTOMER } from '@/app/graphql/mutations/customerMutations';
+import { READ_PROJECTS } from '@/app/graphql/queries/projectQueries';
+import { DELETE_PROJECT } from '@/app/graphql/mutations/projectMutations';
 import { useAppDispatch, useAppSelector } from "@/app/store/redux/hooks";
 import { createAlert } from '@/app/store/redux/actions/widgets';
 import DataTable from '@/components/widgets/Tables/DataTable';
 import { v4 as uuidv4 } from "uuid";
 import { IDataStatus } from "@/components/types/props";
-import { tableHeaderListing } from './_data/index';
+import { projectTableHeaderListing } from './_data/index';
+import Button from "@/components/widgets/Buttons/Button";
+import { EButtonType } from '@/components/types/props/enum';
+import { copyToClipboard } from "../_helpers/global/functions";
 
-
-const CustomerList = () => {
-  const [getAllCustomers, { data: customerData, loading: customerLoading, error, refetch }] = useLazyQuery(READ_CUSTOMERS); // list customers
-  const [deleteCustomer] = useMutation(DELETE_CUSTOMER); // delete customer
+const ProjectList = () => {
+  const [getAllProjects, { data: projectData, loading: projectLoading, error, refetch }] = useLazyQuery(READ_PROJECTS); // list projects
+  const [deleteProject] = useMutation(DELETE_PROJECT); // delete customer
 
   // REDUX
   const dispatch = useAppDispatch();
-  const [alertId] = useState(uuidv4());
 
   // APOLLO MUTATION
-  const [customers, setCustomerList] = useState<TCustomer[]>([]); // customer state
+  const [projects, setCustomerList] = useState<TProject[]>([]); // customer state
   const [dataStatus, setDataStatus] = useState<IDataStatus>({
     isLoading: true,
     count: 0,
     error: {
       message: ''
     },
-    empty: "Aucun client!"
+    empty: "Aucun projet!"
   });
 
   // DATA: SET DATA TO STATE
   useEffect(() => {
-    if (!customerData) {
-      getAllCustomers()
+    if (!projectData) {
+      getAllProjects()
       // *** ____ success
       .then(({
         loading,
         data: {
-          getAllCustomers: {
+          getAllProjects: {
             data: dataList
           }
         }
@@ -58,7 +59,6 @@ const CustomerList = () => {
       // !!! ____ error
       .catch((error) => {
         dispatch(createAlert({
-          id: alertId,
           isShown: true,
           title: "Erreur!",
           message: error.message || `Erreur inconnue!`,
@@ -73,11 +73,11 @@ const CustomerList = () => {
         }))  
       });
     } else {
-      setCustomerList(customerData.getAllCustomers.data)
+      setCustomerList(projectData.getAllProjects.data)
     };
-    // console.log("customers", customers);
+    // console.log("projects", projects);
 
-  }, [customerData]);
+  }, [projectData]);
 
   // *** #1. table main actions (search...)
   const tableActionList: ICrudAction[] = [
@@ -106,19 +106,19 @@ const CustomerList = () => {
       btnSize: EButtonSize.normal,
       textVisibleClasses: 'hidden lg:block',
       customclass: 'py-2 px-2.5 ml-1 lg:ml-1.5',
-      hrefLink: '/customers/customer-add',
+      hrefLink: '/projects/project-add',
     }
   ];
 
   //  *** #2. crud (delete/edit/show)
-  const dataActionList = ({id_societe}: any): ICrudAction[] => ([
+  const dataActionList = ({id}: any): ICrudAction[] => ([
     {
       actionType: ECrudActionType.link,
       title: "Afficher",
       icon: FiEye,
       textVisibleClasses: "hidden 2xl:block",
       customclass: "py-2 px-2.5 ml-1 lg:ml-1.5",
-      hrefLink: `/customers/customer-detail/${id_societe}`,
+      hrefLink: `/projects/project-detail/${id}`,
     },
     {
       actionType: ECrudActionType.link,
@@ -126,7 +126,7 @@ const CustomerList = () => {
       icon: FiEdit3,
       textVisibleClasses: "hidden 2xl:block",
       customclass: "py-2 px-2.5 ml-1 lg:ml-1.5",
-      hrefLink: `/customers/customer-edit/${id_societe}`,
+      hrefLink: `/projects/project-edit/${id}`,
     },
     {
       actionType: ECrudActionType.click,
@@ -139,16 +139,16 @@ const CustomerList = () => {
           ...prevState,
           isLoading: true
         }))
-        await deleteCustomer({
-          variables: { id_societe },
+        await deleteProject({
+          variables: { id },
           update (cache) {
             console.log('cache', cache);
           }
         }).then(({
           data: {
-            deleteCustomer: {
+            deleteProject: {
               data: {
-                raison_social
+                designation
               }
             }
           }
@@ -158,10 +158,9 @@ const CustomerList = () => {
             isLoading: false
           }))
           dispatch(createAlert({
-            id: alertId,
             isShown: true,
             title: "Succès!",
-            message: `Client "${(raison_social?.substring(0, 50))}" Supprimé avec succès!`,
+            message: `Client "${(designation?.substring(0, 50))}" Supprimé avec succès!`,
             variant: EAlertTheme.info,
           }));
         }).catch(() => {
@@ -170,7 +169,6 @@ const CustomerList = () => {
             isLoading: false
           }))
           dispatch(createAlert({
-            id: alertId,
             isShown: true,
             title: "Erreur!",
             message: `Erreur de suppression!`,
@@ -181,53 +179,64 @@ const CustomerList = () => {
     },
   ]);
 
+  const copyText = (id: any) => {
+    const copiedMsgElem = document.querySelector(`#idProjectCopied${id}`);
+    copyToClipboard(`#idProjectInput${id}`)
+    copiedMsgElem?.classList.add('block');
+    copiedMsgElem?.classList.remove('hidden');
+    setTimeout(()  => {
+      copiedMsgElem?.classList.remove('block');
+      copiedMsgElem?.classList.add('hidden');
+    }, 1000);
+  }
+
   // JSX
   return (
     <CrudLayout
-      headingText="Clients"
-      subHeadingText={`Total clients: ${customers?.length || 0}`}
+      headingText="Projets"
+      subHeadingText={`Total projets: ${projects?.length || 0}`}
       actionList={tableActionList}
     >
       <DataTable
-        tableHeader={tableHeaderListing}
+        tableHeader={projectTableHeaderListing}
         dataStatus={dataStatus}
         tableData={[
           {
-            cellkey: 'raison_social',
+            cellkey: 'id_project',
             jsxTemplate: (
-              customers.map((item: TCustomer) => (
-                <h1 className="font-bold text-theme">{item.raison_social}</h1>
+              projects.map((item: TProject) => (
+                <div className="font-bold text-theme relative">
+                  <div className="flex items-center">
+                    <Button type={EButtonType.button} clickEvent={() => copyText(item.id_project)} popTitle={"Copier"}>
+                      <FiCopy />
+                    </Button>
+                    <input className="block bg-transparent text-theme w-20" id={`idProjectInput${item.id_project}`} value={item?.id_project as string} readOnly={true} />
+                  </div>
+                  <small id={`idProjectCopied${item.id_project}`} className="hidden w-full text-theme absolute">Copié</small>
+                </div>
               ))
             ),
           },
           {
-            cellkey: 'form_jury',
+            cellkey: 'designation',
             jsxTemplate: (
-              customers.map((item: TCustomer) => (
-                <h1 className="text-theme">{item.form_jury}</h1>
+              projects.map((item: TProject) => (
+                <h1 className="text-theme">{item?.designation}</h1>
               ))
             ),
           },
           {
-            cellkey: 'ville',
+            cellkey: 'client',
             jsxTemplate: (
-              customers.map((item: TCustomer) => (
-                <h1 className="text-theme">{item.ville}</h1>
-              ))
-            ),
-          },
-          {
-            cellkey: 'pays',
-            jsxTemplate: (
-              customers.map((item: TCustomer) => (
-                <h1 className="text-theme">{item.pays}</h1>
+              projects.map((item: TProject) => (
+                <span className="text-theme">{item?.Customer?.raison_social}</span>
               ))
             ),
           },
         ]}
         tableActions={
-          customers.map((customer: TCustomer) =>
-          dataActionList({id_societe: customer.id_societe}).map((action, key) => (
+          projects.map((item: TProject) =>
+          dataActionList({id: item?.id_project}).map((action, key) => (
             <CrudAction
               actionType={action.actionType}
               icon={action.icon}
@@ -243,4 +252,4 @@ const CustomerList = () => {
   );
 };
 
-export default CustomerList;
+export default ProjectList;

@@ -11,15 +11,17 @@ export const initialState: IAlert[] = [
     title: "Succès!",
     message: "",
     variant: EAlertTheme.success,
+    delay: 0,
   }
 ];
 
 const alertReducer = createReducer(initialState, builder => {
   builder
     .addCase(createAlert, (state, action) => {
+      const alertId = uuidv4();
       state.push({
         ...action.payload,
-        ...{id: uuidv4()}
+        ...{id: alertId}
       });
       return state;
     })
